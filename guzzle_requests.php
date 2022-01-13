@@ -17,7 +17,7 @@ if (!$conn) {
 
   //Product links id (from p_links table) given in variable i for fetching data from that link.
   // id starts from 9 and ends at 385 !!!
-for($i=329;$i<=400;$i++)
+for($i=201;$i<=400;$i++)
 {
 
 
@@ -164,13 +164,13 @@ for($i=329;$i<=400;$i++)
     }
 
             //set 0 to 1 in p_links table for fetched linked
-            mysqli_free_result($result);
+
               $sql = "UPDATE `collection_links` SET `checked` = '1' WHERE `collection_links`.`id` = ".$i;
                    $result4 =mysqli_query($conn, $sql);
    
                    echo "<br> Done ! Checked True for id : ".$i."<br/> <br/>";
 
-             
+             mysqli_free_result($result);
     }
 
     else{
