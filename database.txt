@@ -1,0 +1,9 @@
+id           int(11)
+handle       varchar(255)
+title        varchar(255)
+body         Text
+sku          varchar(255)
+price        varchar(255)
+barcode      varchar(255)
+img src      varchar(255)
+img position int(11)

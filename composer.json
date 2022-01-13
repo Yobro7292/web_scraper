@@ -1,0 +1,18 @@
+{
+    "name": "333/scraping",
+    "require": {
+        "php": "^7.4",
+        "guzzlehttp/guzzle": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "333\\Scraping\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yogi Hariyani",
+            "email": "hariyaniyogi7292@gmail.com"
+        }
+    ]
+}
