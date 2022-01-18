@@ -13,11 +13,11 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
   }
-
+ 
 
   //Product links id (from p_links table) given in variable i for fetching data from that link.
   // id starts from 9 and ends at 385 !!!
-for($i=201;$i<=400;$i++)
+for($i=750;$i<=774;$i++)
 {
 
 
@@ -29,8 +29,7 @@ for($i=201;$i<=400;$i++)
         if($data_links['checked']==0)
         {
 
-        
-    
+           
 
         $url = $data_links['links'];
 
@@ -53,7 +52,7 @@ for($i=201;$i<=400;$i++)
             'sec-fetch-user: ?1',
             'sec-fetch-dest: document',
             'accept-language: en-IN,en-US;q=0.9,en;q=0.8,gu-IN;q=0.7,gu;q=0.6,en-GB;q=0.5',
-            'cookie: _ga=GA1.3.830207600.1641877203; _gid=GA1.3.1458659679.1641877203; mailchimp_landing_site=https://seconique.co.uk/?wc-ajax=get_refreshed_fragments; wfwaf-authcookie-ff0b1846b8d2d99eab14f08da055e4a9=4618|other|read|0f6bd8ad801ab6a55355dbf1e96572bc06be8155a79f0192e0f6f2e818c39a35; wp_woocommerce_session_30b1663b28ebfb0399f8303112b69847=4618||1642225018||1642221418||307e17449a2936f9cd01ae5bafe48ef2; woocommerce_items_in_cart=1; woocommerce_cart_hash=993384c154d5b2ec5a9c7d6dec977efd; temp_id=temp-9663; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_30b1663b28ebfb0399f8303112b69847=info@bedroomking.co.uk|1642232891|hVwEXtAvTTaLtYlTV8L8FrREeEcsXTSQAXR3l800hMB|bc54ef9bc45cdb8b64e85192b673cfcaa2bbc93ea3f850f3a18d4cf785cc506c; hidePopup=true; _gat_gtag_UA_55289651_2=1',
+            'cookie: temp_id=temp-961; hidePopup=true; _ga=GA1.3.830207600.1641877203; mailchimp_landing_site=https://seconique.co.uk/?wc-ajax=get_refreshed_fragments; _gid=GA1.3.1714521906.1642485996; temp_id=temp-5172; wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_30b1663b28ebfb0399f8303112b69847=info@bedroomking.co.uk|1642658894|WAUGF0XHc2yTLpVwNlvE3d1IRaAGnS1nCFZztcQLKIM|5dbc2aab17c1e5960ca2d910ff9110095aef8e798fe43d42058549282855ea5b; wfwaf-authcookie-ff0b1846b8d2d99eab14f08da055e4a9=4618|other|read|96af5c35839e7b5959e37bea21ddf93481b175b1b60f152488e5aff50cde1e65; woocommerce_items_in_cart=1; woocommerce_cart_hash=993384c154d5b2ec5a9c7d6dec977efd; wp_woocommerce_session_30b1663b28ebfb0399f8303112b69847=4618||1642658894||1642655294||0f04c01f1e25a70954986b85ccdaf8be; hidePopup=true; _gat_gtag_UA_55289651_2=1',
             
     
             ];
@@ -95,7 +94,7 @@ for($i=201;$i<=400;$i++)
         foreach($product->find('h1[class="darkblack_font font22"]') as $titles)
         {
             $t = explode("<br>", $titles->innertext);
-        
+            $t[0] = str_replace("'", " ", trim($t[0]));
             $handle = str_replace(" ","-",trim($t[0])); // Put dashes between handle name
         }
 
@@ -140,6 +139,8 @@ for($i=201;$i<=400;$i++)
 
             // Adding to Databasse Starts from here
 
+            echo $t[0]."<br>";
+            echo trim($o_price[1]);
         $number=0;
         foreach($images as $imge)
         {
@@ -148,14 +149,24 @@ for($i=201;$i<=400;$i++)
             {
                 $sql = "INSERT INTO `products` (`id`, `handle`, `title`, `body`, `sku`, `price`, `barcode`, `img_src`, `img_position`, `collection`) VALUES (NULL, '".strtolower($handle)."', '".trim($t[0])."', '".trim($desc)."', '".trim($extractedProductCodes[0])."', '".trim($o_price[1])."', '".trim($extractedBarcode[0])."', '".$imge."', '".($number+1)."','".$data_links['collection']."')";
                 
+                
                         $result2 = mysqli_query($conn, $sql);
+                        if (!($result2))
+                        {
+                           echo mysqli_error($conn);
+                        }
             }
             else{ 
                 //insert only handle, image src and image position 
 
                 $sql = "INSERT INTO `products` (`handle`, `img_src`, `img_position`) VALUES ('".strtolower($handle)."', '".$imge."', '".($number+1)."')";
                
+                
                         $result3 = mysqli_query($conn, $sql);
+                        if (!($result3))
+                        {
+                           echo mysqli_error($conn);
+                        }
                 }
 
             
@@ -165,10 +176,11 @@ for($i=201;$i<=400;$i++)
 
             //set 0 to 1 in p_links table for fetched linked
 
-              $sql = "UPDATE `collection_links` SET `checked` = '1' WHERE `collection_links`.`id` = ".$i;
-                   $result4 =mysqli_query($conn, $sql);
-   
-                   echo "<br> Done ! Checked True for id : ".$i."<br/> <br/>";
+            $sql = "UPDATE `collection_links` SET `checked` = '1' WHERE `collection_links`.`id` = ".$i;
+            $result4 =mysqli_query($conn, $sql);
+
+            echo "<br> Done ! Checked True for id : ".$i."<br/> <br/>";
+    
 
              mysqli_free_result($result);
     }
